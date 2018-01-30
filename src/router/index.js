@@ -9,6 +9,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  base: '/v-game',
   routes: [{ path: '/index', redirect: '/' },
     { path: '/', component: GameChongshangshuerte },
     { path: '/game-chongshangshuerte', component: GameChongshangshuerte },
