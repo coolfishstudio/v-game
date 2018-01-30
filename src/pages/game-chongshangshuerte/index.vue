@@ -34,7 +34,8 @@ export default {
       current: 1,
       documentWidth: window.screen.availWidth > 420 ? 420 : window.screen.availWidth,
       time: 30,
-      timer: null
+      timer: null,
+      isEnd: false
     }
   },
   mounted () {
@@ -43,6 +44,7 @@ export default {
   methods: {
     initDate () {
       this.current = 1
+      this.isEnd = false
       // 获取随机数
       const numbers = new Array(this.row * this.col).fill(0).map((v, i) => i + 1).sort(() => 0.5 - Math.random())
       // 处理样式
@@ -62,6 +64,9 @@ export default {
       this.cells = _cells
       // 开始游戏
       this.timer = setInterval(() => {
+        if (this.isEnd) {
+          clearInterval(this.timer)
+        }
         if ((this.time--) <= 0) {
           clearInterval(this.timer)
           if (this.current !== 26) {
@@ -77,6 +82,7 @@ export default {
         this.current++
       }
       if (this.current === 26) {
+        this.isEnd = true
         alert('恭喜，挑战成功')
       }
     }
