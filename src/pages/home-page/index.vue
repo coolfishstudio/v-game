@@ -51,7 +51,7 @@ export default {
     height: 1.23rem
     text-align: right
     line-height: 1.6
-    background-image: url('../../../static/img/button_bg.png')
+    background-image: url('http://demo.cssmoban.com/code/button/animated-bubble-buttons/buttons/button_bg.png')
     background-size: cover
     .text
       float: right
