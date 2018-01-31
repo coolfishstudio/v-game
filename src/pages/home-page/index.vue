@@ -24,11 +24,16 @@ export default {
   data () {
     return {
       menus: [
-        { title: '挑战舒尔特3*3', url: '/game-shuerte?r=3' },
-        { title: '挑战舒尔特4*4', url: '/game-shuerte?r=4' },
-        { title: '挑战舒尔特5*5', url: '/game-shuerte?r=5' },
-        { title: '挑战舒尔特6*6', url: '/game-shuerte?r=6' },
-        { title: '挑战舒尔特7*7', url: '/game-shuerte?r=7' }
+        { title: '挑战舒尔特3*3', url: '/game-shuerte?r=3&m=0' },
+        { title: '训练舒尔特3*3', url: '/game-shuerte?r=3&m=1' },
+        { title: '挑战舒尔特4*4', url: '/game-shuerte?r=4&m=0' },
+        { title: '训练舒尔特4*4', url: '/game-shuerte?r=4&m=1' },
+        { title: '挑战舒尔特5*5', url: '/game-shuerte?r=5&m=0' },
+        { title: '训练舒尔特5*5', url: '/game-shuerte?r=5&m=1' },
+        { title: '挑战舒尔特6*6', url: '/game-shuerte?r=6&m=0' },
+        { title: '训练舒尔特6*6', url: '/game-shuerte?r=6&m=1' },
+        { title: '挑战舒尔特7*7', url: '/game-shuerte?r=7&m=0' },
+        { title: '训练舒尔特7*7', url: '/game-shuerte?r=7&m=1' }
       ]
     }
   }
@@ -46,7 +51,7 @@ export default {
     height: 1.23rem
     text-align: right
     line-height: 1.6
-    background-image: url('./image/button_bg.png')
+    background-image: url('../../../static/img/button_bg.png')
     background-size: cover
     .text
       float: right

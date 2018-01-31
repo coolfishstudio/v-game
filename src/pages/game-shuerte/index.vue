@@ -43,6 +43,7 @@ export default {
       cells: [],
       current: 1,
       documentWidth: window.screen.availWidth > 420 ? 420 : window.screen.availWidth,
+      mode: 0, // 0 挑战 1 训练
       time: 30,
       timer: null,
       isEnd: false,
@@ -55,8 +56,12 @@ export default {
   methods: {
     initDate () {
       let r = +this.$route.query.r || 5
+      let m = +this.$route.query.m || 0
       if (r && [3, 4, 5, 6, 7, 8, 9].indexOf(r) !== -1) {
         this.row = this.col = r
+      }
+      if ([0, 1].indexOf(m) !== -1) {
+        this.mode = m
       }
       this.gridContainerWidth = Number((0.92 * this.documentWidth).toFixed(2))
       this.cellSpace = Number((0.02 * this.documentWidth).toFixed(2))
@@ -66,7 +71,7 @@ export default {
     initCells () {
       this.current = 1
       this.isEnd = false
-      this.time = this.row * (this.row + 2) // x^2 + 2x
+      this.time = this.mode === 0 ? this.row * (this.row + 2) : 0 // x^2 + 2x
       // 获取随机数
       const numbers = new Array(this.row * this.col).fill(0).map((v, i) => i + 1).sort(() => 0.5 - Math.random())
       let _cells = []
@@ -85,14 +90,18 @@ export default {
       this.initCells()
       // // 开始游戏
       this.timer = setInterval(() => {
-        if (this.isEnd) {
-          clearInterval(this.timer)
-        }
-        if ((this.time--) <= 0) {
+        if (this.mode === 0 && (this.time--) <= 0) {
           clearInterval(this.timer)
           if (this.current !== (this.row * this.col + 1)) {
             this.alert('抱歉，挑战失败')
             this.time = 0
+          }
+        }
+        if (this.mode === 1) {
+          this.time++
+          if (this.time >= (this.row * this.row * this.row)) {
+            this.alert('超时，挑战失败')
+            clearInterval(this.timer)
           }
         }
       }, 1000)
@@ -104,6 +113,7 @@ export default {
       }
       if (this.current === (this.row * this.col + 1)) {
         this.isEnd = true
+        clearInterval(this.timer)
         this.alert('恭喜，挑战成功')
       }
     },
