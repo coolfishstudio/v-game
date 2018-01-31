@@ -46,7 +46,7 @@ export default {
     height: 1.23rem
     text-align: right
     line-height: 1.6
-    background-image: url('../../assets/button_bg.png')
+    background-image: url('./image/button_bg.png')
     background-size: cover
     .text
       float: right
