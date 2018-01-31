@@ -18,6 +18,7 @@
           :height="item.height"
           :text="item.text"
           :ref="'item-' + item.text"
+          :color="item.color"
           @clickItem="clickItem"></y-cell>
       </div>
     </div>
@@ -74,6 +75,7 @@ export default {
       this.time = this.mode === 0 ? this.row * (this.row + 2) : 0 // x^2 + 2x
       // 获取随机数
       const numbers = new Array(this.row * this.col).fill(0).map((v, i) => i + 1).sort(() => 0.5 - Math.random())
+      const color = ['green', 'red', 'blue', 'gold'][Math.floor(Math.random() * 4)]
       let _cells = []
       for (let i = 0; i < this.row * this.col; i++) {
         _cells.push({
@@ -81,7 +83,8 @@ export default {
           width: this.gridCellWidth,
           height: this.gridCellWidth,
           top: this.cellSpace + Math.floor(i / this.row) * (this.gridCellWidth + this.cellSpace),
-          left: this.cellSpace + i % this.col * (this.gridCellWidth + this.cellSpace)
+          left: this.cellSpace + i % this.col * (this.gridCellWidth + this.cellSpace),
+          color: color
         })
       }
       this.cells = _cells

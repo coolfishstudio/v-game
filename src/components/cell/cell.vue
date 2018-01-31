@@ -1,5 +1,11 @@
 <template>
-  <div class="number-cell blue" :class="{on: isOn}" :style="{
+  <div class="number-cell" :class="{
+    'red': color === 'red',
+    'green': color === 'green',
+    'blue': color === 'blue',
+    'gold': color === 'gold',
+    'on': isOn
+  }" :style="{
     width: width + 'px',
     height: height + 'px',
     lineHeight: 0.92 * height + 'px',
@@ -57,6 +63,10 @@ export default {
     background-color: #30a7c2
     &.on
       background-color: #87e1f5
+  &.gold
+    background-color: #faad14
+    &.on
+      background-color: #ffd666
   &:after
     content: ''
     display: block
