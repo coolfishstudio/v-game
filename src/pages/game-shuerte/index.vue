@@ -13,29 +13,40 @@
         top: item.top + 'px',
         left: item.left + 'px'
       }">
-        <y-cell :width="item.width" :height="item.height" :text="item.text" :ref="'item-' + item.text" @clickItem="clickItem"></y-cell>
+        <y-cell
+          :width="item.width"
+          :height="item.height"
+          :text="item.text"
+          :ref="'item-' + item.text"
+          @clickItem="clickItem"></y-cell>
       </div>
     </div>
+    <y-dialog ref='dialog' :text="alertText" confirmBtnText="再次挑战" cancelBtnText="返回首页" type="confirm" @cancel="gotoIndex" @confirm="refresh"></y-dialog>
   </div>
 </template>
 <script>
-import YCell from './components/cell'
+import YCell from 'components/cell/cell'
+import YDialog from 'components/dialog/dialog'
 
 export default {
   components: {
-    YCell
+    YCell,
+    YDialog
   },
   data () {
     return {
-      row: 5, // 行
-      col: 5, // 列
+      row: 3, // 行
+      col: 3, // 列
       gridContainerWidth: 0,
+      cellSpace: 0,
+      gridCellWidth: 0,
       cells: [],
       current: 1,
       documentWidth: window.screen.availWidth > 420 ? 420 : window.screen.availWidth,
       time: 30,
       timer: null,
-      isEnd: false
+      isEnd: false,
+      alertText: ''
     }
   },
   mounted () {
@@ -43,34 +54,44 @@ export default {
   },
   methods: {
     initDate () {
+      let r = +this.$route.query.r || 5
+      if (r && [3, 4, 5, 6, 7, 8, 9].indexOf(r) !== -1) {
+        this.row = this.col = r
+      }
+      this.gridContainerWidth = Number((0.92 * this.documentWidth).toFixed(2))
+      this.cellSpace = Number((0.02 * this.documentWidth).toFixed(2))
+      this.gridCellWidth = Number(((0.92 - 0.02 * (this.col + 1)) / this.row * this.documentWidth).toFixed(2))
+      this.startGame()
+    },
+    initCells () {
       this.current = 1
       this.isEnd = false
+      this.time = this.row * (this.row + 2) // x^2 + 2x
       // 获取随机数
       const numbers = new Array(this.row * this.col).fill(0).map((v, i) => i + 1).sort(() => 0.5 - Math.random())
-      // 处理样式
-      this.gridContainerWidth = Number((0.92 * this.documentWidth).toFixed(2))
-      const cellSpace = Number((0.02 * this.documentWidth).toFixed(2))
-      const gridCellWidth = Number(((0.92 - 0.02 * (this.col + 1)) / this.row * this.documentWidth).toFixed(2))
       let _cells = []
       for (let i = 0; i < this.row * this.col; i++) {
         _cells.push({
           text: numbers[i],
-          width: gridCellWidth,
-          height: gridCellWidth,
-          top: cellSpace + Math.floor(i / this.row) * (gridCellWidth + cellSpace),
-          left: cellSpace + i % this.col * (gridCellWidth + cellSpace)
+          width: this.gridCellWidth,
+          height: this.gridCellWidth,
+          top: this.cellSpace + Math.floor(i / this.row) * (this.gridCellWidth + this.cellSpace),
+          left: this.cellSpace + i % this.col * (this.gridCellWidth + this.cellSpace)
         })
       }
       this.cells = _cells
-      // 开始游戏
+    },
+    startGame () {
+      this.initCells()
+      // // 开始游戏
       this.timer = setInterval(() => {
         if (this.isEnd) {
           clearInterval(this.timer)
         }
         if ((this.time--) <= 0) {
           clearInterval(this.timer)
-          if (this.current !== 26) {
-            alert('抱歉，挑战失败')
+          if (this.current !== (this.row * this.col + 1)) {
+            this.alert('抱歉，挑战失败')
             this.time = 0
           }
         }
@@ -81,10 +102,26 @@ export default {
         this.$refs[`item-${this.current}`][0].changeColor()
         this.current++
       }
-      if (this.current === 26) {
+      if (this.current === (this.row * this.col + 1)) {
         this.isEnd = true
-        alert('恭喜，挑战成功')
+        this.alert('恭喜，挑战成功')
       }
+    },
+    alert (text) {
+      if (text) {
+        this.alertText = text
+      }
+      this.$refs.dialog.show()
+    },
+    refresh () {
+      this.$refs.dialog.hide()
+      for (let i = 0; i < this.row * this.col; i++) {
+        this.$refs[`item-${i + 1}`][0].refreshColor()
+      }
+      this.startGame()
+    },
+    gotoIndex () {
+      this.$router.push('/')
     }
   }
 }

@@ -2,7 +2,8 @@
   <div class="number-cell blue" :class="{on: isOn}" :style="{
     width: width + 'px',
     height: height + 'px',
-    lineHeight: 0.92 * height + 'px'
+    lineHeight: 0.92 * height + 'px',
+    fontSize: 0.6 * width + 'px'
   }" @click="clickItem">{{ text }}</div>
 </template>
 
@@ -30,6 +31,9 @@ export default {
     },
     changeColor () {
       this.isOn = !this.isOn
+    },
+    refreshColor () {
+      this.isOn = false
     }
   }
 }

@@ -1,12 +1,17 @@
 <template>
   <div id="app" @touchmove.prevent>
+    <y-header></y-header>
     <router-view/>
   </div>
 </template>
 
 <script>
+import YHeader from 'components/header/header'
+
 export default {
-  name: 'App'
+  components: {
+    YHeader
+  }
 }
 </script>
 
